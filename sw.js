@@ -1,29 +1,23 @@
-const CACHE_NAME = 'termo-pwa-v2';
-const ASSETS = [
-  './',
-  './index.html',
-  './styles.css',
-  './app.js',
-  './words.js',
-  './multiplayer.js',
-  './manifest.json'
-];
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
-  );
-});
-
-self.addEventListener('fetch', (event) => {
-  // Ignorar requisições externas como Firebase Realtime Database
-  if (event.request.url.includes('firebaseio.com') || event.request.url.includes('googleapis.com')) {
-    return;
-  }
-
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
-    })
-  );
-});
+{
+  "short_name": "Letrando",
+  "name": "Letrando - Jogo de Palavras",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#121214",
+  "theme_color": "#121214",
+  "display": "standalone",
+  "orientation": "portrait"
+}

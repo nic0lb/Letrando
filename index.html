@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <!-- viewport-fit=cover: usa a tela toda (notch do iPhone) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Termo</title>
+  <meta name="description" content="Jogo de palavras diário, com modo 1v1.">
+
+  <!-- ===== PWA / Android ===== -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#14161a">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- ===== PWA / iOS (Safari não lê tudo do manifest) ===== -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Termo">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Termo</h1>
+      <button id="btn-versus" type="button">1v1</button>
+    </header>
+
+    <!-- Barra do oponente: só aparece no modo 1v1 -->
+    <section id="opponent" hidden>
+      <div id="opp-info"><span id="opp-label">Oponente</span>
+        <button id="btn-leave" type="button">Sair</button></div>
+      <div id="opp-grid" aria-label="Progresso do oponente"></div>
+    </section>
+
+    <main><div id="board" aria-label="Tabuleiro"></div></main>
+    <div id="message" role="status" aria-live="polite"></div>
+    <div id="keyboard" aria-label="Teclado"></div>
+  </div>
+
+  <!-- Diálogo do modo 1v1 -->
+  <dialog id="dlg">
+    <h2>Modo 1v1</h2>
+    <button id="btn-create" type="button" class="primary">Criar sala</button>
+    <p class="sep">ou entre com um código</p>
+    <div class="row">
+      <input id="in-code" maxlength="4" placeholder="A3K9" autocapitalize="characters" autocomplete="off">
+      <button id="btn-join" type="button">Entrar</button>
+    </div>
+    <p id="dlg-msg"></p>
+    <button id="btn-share" type="button" hidden>Compartilhar link</button>
+    <button id="btn-close" type="button" class="ghost">Fechar</button>
+  </dialog>
+
+  <!-- type="module": permite import/export entre app.js, words.js e multiplayer.js -->
+  <script type="module" src="app.js"></script>
+  <script>
+    // Registra o Service Worker (caminho relativo: funciona em usuario.github.io/repo/)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () =>
+        navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW falhou:', e)));
+    }
+  </script>
+</body>
+</html>

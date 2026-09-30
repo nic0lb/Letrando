@@ -6,113 +6,112 @@
   <title>Letrando - Jogo de Palavras</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#121214">
+  <meta name="theme-color" content="#14161a">
 </head>
 <body>
 
-  <!-- Cabeçalho Principal -->
-  <header class="header">
-    <h1>Letrando</h1>
-    <div class="header-buttons">
-      <select id="select-categoria" onchange="iniciarJogo(this.value)">
-        <option value="geral">Geral</option>
-        <option value="tecnologia">Tecnologia</option>
-        <option value="futebol">Futebol</option>
-        <option value="geografia">Geografia</option>
-      </select>
-      <button class="btn" onclick="gerarGridEmojis()">Compartilhar 🚀</button>
-    </div>
-  </header>
+  <div id="app">
+    <!-- Cabeçalho -->
+    <header>
+      <h1>Letrando</h1>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <select id="select-categoria" onchange="iniciarJogo(this.value)" style="background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; font-weight: 700;">
+          <option value="geral">Geral</option>
+          <option value="tecnologia">Tecnologia</option>
+          <option value="futebol">Futebol</option>
+          <option value="geografia">Geografia</option>
+        </select>
+        <button id="btn-versus" onclick="gerarGridEmojis()">🚀</button>
+      </div>
+    </header>
 
-  <!-- Tabuleiro do Jogo (6 linhas x 5 colunas) -->
-  <main class="board-container">
-    <div id="board" class="board">
-      <!-- Linha 0 -->
-      <div class="row">
-        <div id="cell-0-0" class="cell"></div>
-        <div id="cell-0-1" class="cell"></div>
-        <div id="cell-0-2" class="cell"></div>
-        <div id="cell-0-3" class="cell"></div>
-        <div id="cell-0-4" class="cell"></div>
-      </div>
-      <!-- Linha 1 -->
-      <div class="row">
-        <div id="cell-1-0" class="cell"></div>
-        <div id="cell-1-1" class="cell"></div>
-        <div id="cell-1-2" class="cell"></div>
-        <div id="cell-1-3" class="cell"></div>
-        <div id="cell-1-4" class="cell"></div>
-      </div>
-      <!-- Linha 2 -->
-      <div class="row">
-        <div id="cell-2-0" class="cell"></div>
-        <div id="cell-2-1" class="cell"></div>
-        <div id="cell-2-2" class="cell"></div>
-        <div id="cell-2-3" class="cell"></div>
-        <div id="cell-2-4" class="cell"></div>
-      </div>
-      <!-- Linha 3 -->
-      <div class="row">
-        <div id="cell-3-0" class="cell"></div>
-        <div id="cell-3-1" class="cell"></div>
-        <div id="cell-3-2" class="cell"></div>
-        <div id="cell-3-3" class="cell"></div>
-        <div id="cell-3-4" class="cell"></div>
-      </div>
-      <!-- Linha 4 -->
-      <div class="row">
-        <div id="cell-4-0" class="cell"></div>
-        <div id="cell-4-1" class="cell"></div>
-        <div id="cell-4-2" class="cell"></div>
-        <div id="cell-4-3" class="cell"></div>
-        <div id="cell-4-4" class="cell"></div>
-      </div>
-      <!-- Linha 5 -->
-      <div class="row">
-        <div id="cell-5-0" class="cell"></div>
-        <div id="cell-5-1" class="cell"></div>
-        <div id="cell-5-2" class="cell"></div>
-        <div id="cell-5-3" class="cell"></div>
-        <div id="cell-5-4" class="cell"></div>
-      </div>
-    </div>
-  </main>
+    <!-- Mensagem de Feedback -->
+    <div id="message"></div>
 
-  <!-- Teclado Virtual -->
-  <div id="keyboard" class="keyboard">
-    <div class="keyboard-row">
-      <button class="key" data-key="Q" onclick="tratarTecla('Q')">Q</button>
-      <button class="key" data-key="W" onclick="tratarTecla('W')">W</button>
-      <button class="key" data-key="E" onclick="tratarTecla('E')">E</button>
-      <button class="key" data-key="R" onclick="tratarTecla('R')">R</button>
-      <button class="key" data-key="T" onclick="tratarTecla('T')">T</button>
-      <button class="key" data-key="Y" onclick="tratarTecla('Y')">Y</button>
-      <button class="key" data-key="U" onclick="tratarTecla('U')">U</button>
-      <button class="key" data-key="I" onclick="tratarTecla('I')">I</button>
-      <button class="key" data-key="O" onclick="tratarTecla('O')">O</button>
-      <button class="key" data-key="P" onclick="tratarTecla('P')">P</button>
-    </div>
-    <div class="keyboard-row">
-      <button class="key" data-key="A" onclick="tratarTecla('A')">A</button>
-      <button class="key" data-key="S" onclick="tratarTecla('S')">S</button>
-      <button class="key" data-key="D" onclick="tratarTecla('D')">D</button>
-      <button class="key" data-key="F" onclick="tratarTecla('F')">F</button>
-      <button class="key" data-key="G" onclick="tratarTecla('G')">G</button>
-      <button class="key" data-key="H" onclick="tratarTecla('H')">H</button>
-      <button class="key" data-key="J" onclick="tratarTecla('J')">J</button>
-      <button class="key" data-key="K" onclick="tratarTecla('K')">K</button>
-      <button class="key" data-key="L" onclick="tratarTecla('L')">L</button>
-    </div>
-    <div class="keyboard-row">
-      <button class="key large" onclick="submeterTentativa()">ENTER</button>
-      <button class="key" data-key="Z" onclick="tratarTecla('Z')">Z</button>
-      <button class="key" data-key="X" onclick="tratarTecla('X')">X</button>
-      <button class="key" data-key="C" onclick="tratarTecla('C')">C</button>
-      <button class="key" data-key="V" onclick="tratarTecla('V')">V</button>
-      <button class="key" data-key="B" onclick="tratarTecla('B')">B</button>
-      <button class="key" data-key="N" onclick="tratarTecla('N')">N</button>
-      <button class="key" data-key="M" onclick="tratarTecla('M')">M</button>
-      <button class="key large" onclick="deletarLetra()">⌫</button>
+    <!-- Tabuleiro (6x5) -->
+    <main>
+      <div id="board">
+        <div class="row" id="row-0">
+          <div class="cell" id="cell-0-0"></div>
+          <div class="cell" id="cell-0-1"></div>
+          <div class="cell" id="cell-0-2"></div>
+          <div class="cell" id="cell-0-3"></div>
+          <div class="cell" id="cell-0-4"></div>
+        </div>
+        <div class="row" id="row-1">
+          <div class="cell" id="cell-1-0"></div>
+          <div class="cell" id="cell-1-1"></div>
+          <div class="cell" id="cell-1-2"></div>
+          <div class="cell" id="cell-1-3"></div>
+          <div class="cell" id="cell-1-4"></div>
+        </div>
+        <div class="row" id="row-2">
+          <div class="cell" id="cell-2-0"></div>
+          <div class="cell" id="cell-2-1"></div>
+          <div class="cell" id="cell-2-2"></div>
+          <div class="cell" id="cell-2-3"></div>
+          <div class="cell" id="cell-2-4"></div>
+        </div>
+        <div class="row" id="row-3">
+          <div class="cell" id="cell-3-0"></div>
+          <div class="cell" id="cell-3-1"></div>
+          <div class="cell" id="cell-3-2"></div>
+          <div class="cell" id="cell-3-3"></div>
+          <div class="cell" id="cell-3-4"></div>
+        </div>
+        <div class="row" id="row-4">
+          <div class="cell" id="cell-4-0"></div>
+          <div class="cell" id="cell-4-1"></div>
+          <div class="cell" id="cell-4-2"></div>
+          <div class="cell" id="cell-4-3"></div>
+          <div class="cell" id="cell-4-4"></div>
+        </div>
+        <div class="row" id="row-5">
+          <div class="cell" id="cell-5-0"></div>
+          <div class="cell" id="cell-5-1"></div>
+          <div class="cell" id="cell-5-2"></div>
+          <div class="cell" id="cell-5-3"></div>
+          <div class="cell" id="cell-5-4"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Teclado Virtual -->
+    <div id="keyboard">
+      <div class="krow">
+        <button class="key" data-key="Q" onclick="tratarTecla('Q')">Q</button>
+        <button class="key" data-key="W" onclick="tratarTecla('W')">W</button>
+        <button class="key" data-key="E" onclick="tratarTecla('E')">E</button>
+        <button class="key" data-key="R" onclick="tratarTecla('R')">R</button>
+        <button class="key" data-key="T" onclick="tratarTecla('T')">T</button>
+        <button class="key" data-key="Y" onclick="tratarTecla('Y')">Y</button>
+        <button class="key" data-key="U" onclick="tratarTecla('U')">U</button>
+        <button class="key" data-key="I" onclick="tratarTecla('I')">I</button>
+        <button class="key" data-key="O" onclick="tratarTecla('O')">O</button>
+        <button class="key" data-key="P" onclick="tratarTecla('P')">P</button>
+      </div>
+      <div class="krow pad">
+        <button class="key" data-key="A" onclick="tratarTecla('A')">A</button>
+        <button class="key" data-key="S" onclick="tratarTecla('S')">S</button>
+        <button class="key" data-key="D" onclick="tratarTecla('D')">D</button>
+        <button class="key" data-key="F" onclick="tratarTecla('F')">F</button>
+        <button class="key" data-key="G" onclick="tratarTecla('G')">G</button>
+        <button class="key" data-key="H" onclick="tratarTecla('H')">H</button>
+        <button class="key" data-key="J" onclick="tratarTecla('J')">J</button>
+        <button class="key" data-key="K" onclick="tratarTecla('K')">K</button>
+        <button class="key" data-key="L" onclick="tratarTecla('L')">L</button>
+      </div>
+      <div class="krow">
+        <button class="key wide" onclick="submeterTentativa()">ENTER</button>
+        <button class="key" data-key="Z" onclick="tratarTecla('Z')">Z</button>
+        <button class="key" data-key="X" onclick="tratarTecla('X')">X</button>
+        <button class="key" data-key="C" onclick="tratarTecla('C')">C</button>
+        <button class="key" data-key="V" onclick="tratarTecla('V')">V</button>
+        <button class="key" data-key="B" onclick="tratarTecla('B')">B</button>
+        <button class="key" data-key="N" onclick="tratarTecla('N')">N</button>
+        <button class="key" data-key="M" onclick="tratarTecla('M')">M</button>
+        <button class="key wide" onclick="deletarLetra()">⌫</button>
+      </div>
     </div>
   </div>
 
@@ -120,17 +119,24 @@
   <script src="words.js"></script>
   <script src="app.js"></script>
   <script>
-    // Registro do Service Worker para PWA
+    // Registro do Service Worker para Instalação PWA
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js');
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('SW registrado com sucesso:', reg))
+          .catch((err) => console.error('Erro ao registrar SW:', err));
+      });
     }
 
-    // Suporte a cliques no teclado e digitação no teclado físico
+    // Handlers de Entrada
     function tratarTecla(letra) {
       if (colunaAtual < 5 && !jogoFinalizado) {
         tentativas[linhaAtual][colunaAtual] = letra;
         const cell = document.getElementById(`cell-${linhaAtual}-${colunaAtual}`);
-        if (cell) cell.textContent = letra;
+        if (cell) {
+          cell.textContent = letra;
+          cell.classList.add('filled');
+        }
         colunaAtual++;
       }
     }
@@ -140,11 +146,14 @@
         colunaAtual--;
         tentativas[linhaAtual][colunaAtual] = '';
         const cell = document.getElementById(`cell-${linhaAtual}-${colunaAtual}`);
-        if (cell) cell.textContent = '';
+        if (cell) {
+          cell.textContent = '';
+          cell.classList.remove('filled');
+        }
       }
     }
 
-    // Captura de digitação do teclado físico
+    // Entrada pelo teclado físico do computador/celular
     document.addEventListener('keydown', (e) => {
       if (jogoFinalizado) return;
       const key = e.key.toUpperCase();

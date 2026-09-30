@@ -1,4 +1,3 @@
-// Estado do Jogo
 let categoriaAtual = 'geral';
 let palavraSecreta = '';
 let linhaAtual = 0;
@@ -6,7 +5,6 @@ let colunaAtual = 0;
 let jogoFinalizado = false;
 let tentativas = Array(6).fill().map(() => Array(5).fill(''));
 
-// Normalização de Strings (Tratamento de Acentos)
 function normalizarTexto(texto) {
   return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
 }
@@ -15,7 +13,6 @@ function iniciarJogo(categoria = 'geral') {
   categoriaAtual = categoria;
   const lista = PALAVRAS[categoria] || PALAVRAS.geral;
   
-  // Sorteia palavra aleatória para o modo atual
   const indice = Math.floor(Math.random() * lista.length);
   palavraSecreta = normalizarTexto(lista[indice]);
 
@@ -24,19 +21,24 @@ function iniciarJogo(categoria = 'geral') {
   jogoFinalizado = false;
   tentativas = Array(6).fill().map(() => Array(5).fill(''));
 
+  document.getElementById('modal-fim').classList.remove('active');
   limparTabuleiroUI();
 }
 
 function limparTabuleiroUI() {
-  const celulas = document.querySelectorAll('.cell');
-  celulas.forEach(cell => {
-    cell.textContent = '';
-    cell.className = 'cell';
-  });
+  for (let r = 0; r < 6; r++) {
+    for (let c = 0; c < 5; c++) {
+      const cell = document.getElementById(`cell-${r}-${c}`);
+      if (cell) {
+        cell.textContent = '';
+        cell.className = 'cell';
+      }
+    }
+  }
 
   const teclas = document.querySelectorAll('.key');
   teclas.forEach(key => {
-    key.classList.remove('correct', 'present', 'absent');
+    key.className = key.classList.contains('wide') ? 'key wide' : 'key';
   });
 }
 
@@ -45,18 +47,17 @@ function submeterTentativa() {
 
   const chute = tentativas[linhaAtual].join('');
   const chuteNormalizado = normalizarTexto(chute);
-  
+
   validarLinha(chuteNormalizado);
 
   if (chuteNormalizado === palavraSecreta) {
     jogoFinalizado = true;
     const palavraExibicao = PALAVRAS_EXIBICAO[palavraSecreta] || palavraSecreta;
-    setTimeout(() => alert(`Parabéns! Acertou a palavra: ${palavraExibicao}`), 300);
-    salvarPontuacao();
+    exibirModal(true, `A palavra era <strong>${palavraExibicao}</strong>. Você acertou na ${linhaAtual + 1}ª tentativa!`);
   } else if (linhaAtual === 5) {
     jogoFinalizado = true;
     const palavraExibicao = PALAVRAS_EXIBICAO[palavraSecreta] || palavraSecreta;
-    setTimeout(() => alert(`Fim de jogo! A palavra era: ${palavraExibicao}`), 300);
+    exibirModal(false, `A palavra era <strong>${palavraExibicao}</strong>. Tente novamente!`);
   } else {
     linhaAtual++;
     colunaAtual = 0;
@@ -68,7 +69,6 @@ function validarLinha(chute) {
   const chuteArr = chute.split('');
   const resultado = Array(5).fill('absent');
 
-  // Primeira passada: Verdes (Corretos)
   chuteArr.forEach((letra, i) => {
     if (letra === secretArr[i]) {
       resultado[i] = 'correct';
@@ -76,7 +76,6 @@ function validarLinha(chute) {
     }
   });
 
-  // Segunda passada: Amarelos (Presentes)
   chuteArr.forEach((letra, i) => {
     if (resultado[i] !== 'correct' && secretArr.includes(letra)) {
       resultado[i] = 'present';
@@ -84,10 +83,12 @@ function validarLinha(chute) {
     }
   });
 
-  // Atualizar UI das Células e Teclado
   resultado.forEach((status, i) => {
     const cell = document.getElementById(`cell-${linhaAtual}-${i}`);
-    if (cell) cell.classList.add(status);
+    if (cell) {
+      cell.classList.remove('filled');
+      cell.classList.add(status);
+    }
 
     const tecla = document.querySelector(`[data-key="${chuteArr[i]}"]`);
     if (tecla) {
@@ -102,9 +103,21 @@ function validarLinha(chute) {
   });
 }
 
-// Gerar Emojis para Partilhar Resultado
+function exibirModal(vitoria, mensagem) {
+  setTimeout(() => {
+    const modal = document.getElementById('modal-fim');
+    document.getElementById('modal-titulo').textContent = vitoria ? 'Parabéns! 🎉' : 'Que pena! 😅';
+    document.getElementById('modal-mensagem').innerHTML = mensagem;
+    modal.classList.add('active');
+  }, 400);
+}
+
+function jogarNovamente() {
+  iniciarJogo(categoriaAtual);
+}
+
 function gerarGridEmojis() {
-  let grid = `Termo PWA - Categoria: ${categoriaAtual.toUpperCase()}\n\n`;
+  let grid = `Letrando - Categoria: ${categoriaAtual.toUpperCase()}\n\n`;
   for (let r = 0; r <= linhaAtual; r++) {
     for (let c = 0; c < 5; c++) {
       const cell = document.getElementById(`cell-${r}-${c}`);
@@ -118,17 +131,4 @@ function gerarGridEmojis() {
   alert('Resultado copiado para a área de transferência! 🚀');
 }
 
-function salvarPontuacao() {
-  const pontosPartida = (6 - linhaAtual) * 100;
-  let pontosTotais = parseInt(localStorage.getItem('pontos_totais') || '0');
-  pontosTotais += pontosPartida;
-  localStorage.setItem('pontos_totais', pontosTotais);
-
-  // Registar no Firebase se disponível
-  if (window.salvarPontuacaoFirebase) {
-    window.salvarPontuacaoFirebase(pontosTotais);
-  }
-}
-
-// Inicializar Jogo
 document.addEventListener('DOMContentLoaded', () => iniciarJogo('geral'));

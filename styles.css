@@ -1,14 +1,54 @@
+/* ===== Tokens com Alto Contraste ===== */
 :root {
-  --bg: #14161a;
-  --surface: #23262d;
+  --bg: #121214;
+  --surface: #1e2026;
   --line: #3a3d45;
-  --text: #f2f2f0;
-  --muted: #9a9ea8;
-  --correct: #6aaa64;
-  --present: #c9b458;
-  --absent: #3a3d45;
-  --key: #565a63;
+  --text: #ffffff;
+  --muted: #a0a5b1;
+  
+  /* Cores de Alto Contraste (Acessíveis) */
+  --correct: #3a86ff;   /* Azul vibrante (Posição Correta) */
+  --present: #ff0055;   /* Rosa/Laranja vibrante (Posição Incorreta) */
+  --absent: #2a2d34;    /* Cinza escuro fosco (Não Existe) */
+  --key: #4a4e58;
   --gap: 6px;
+}
+
+/* Tabuleiro - Cores e Bordas */
+.cell.correct { 
+  background: var(--correct); 
+  border-color: var(--correct); 
+  color: #ffffff;
+}
+
+.cell.present { 
+  background: var(--present); 
+  border-color: var(--present); 
+  color: #ffffff;
+}
+
+.cell.absent { 
+  background: var(--absent);  
+  border-color: #22242a; 
+  color: var(--muted);
+  opacity: 0.6; /* Deixa bem apagado para destacar as letras úteis */
+}
+
+/* Teclado Virtual - Cores Ajustadas */
+.key.correct { 
+  background: var(--correct) !important; 
+  color: #ffffff !important;
+}
+
+.key.present { 
+  background: var(--present) !important; 
+  color: #ffffff !important;
+}
+
+.key.absent { 
+  background: #1e2026 !important; 
+  color: #5a5e6b !important; 
+  opacity: 0.5;
 }
 
 * {
